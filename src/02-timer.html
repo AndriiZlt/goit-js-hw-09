@@ -5,11 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Countdown timer</title>
     <link rel="stylesheet" href="css/common.css" />
+    <link
+      href="
+https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css
+"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <p><a href="index.html">Go back</a></p>
 
-    <input type="date" id="datetime-picker" />
+    <input type="datetime-local" id="datetime-picker" />
     <button type="button" data-start>Start</button>
 
     <div class="timer">
@@ -32,5 +38,8 @@
     </div>
 
     <script src="js/02-timer.js" type="module"></script>
+    <script src="
+https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.all.min.js
+"></script>
   </body>
 </html>
