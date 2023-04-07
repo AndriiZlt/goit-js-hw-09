@@ -16,13 +16,13 @@ function onDateInput() {
   const today = new Date();
   const goalDate = new Date(inputDateRef.value);
   if (goalDate <= today) {
-    Swal.fire({
-      title: 'Error!',
-      text: 'Please choose a date in the future!',
-      icon: 'error',
-      confirmButtonText: 'Cool',
-    });
-    // alert('Please choose a date in the future!');
+    // Swal.fire({
+    //   title: 'Error!',
+    //   text: 'Please choose a date in the future!',
+    //   icon: 'error',
+    //   confirmButtonText: 'Cool',
+    // });
+    alert('Please choose a date in the future!');
     return;
   }
   startBtnRef.removeAttribute('disabled', '');
