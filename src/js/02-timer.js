@@ -1,4 +1,5 @@
-const Swal = require('sweetalert2');
+// const Swal = require('sweetalert2');
+
 startBtnRef = document.querySelector('[data-start]');
 inputDateRef = document.querySelector('#datetime-picker');
 daysRef = document.querySelector('[data-days]');
@@ -17,7 +18,7 @@ function onDateInput() {
   const today = new Date();
   const goalDate = new Date(inputDateRef.value);
   if (goalDate <= today) {
-    Swal.fire('Please choose a date in the future!');
+    alert('Please choose a date in the future!!');
     return;
   }
   startBtnRef.removeAttribute('disabled', '');
