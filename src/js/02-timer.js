@@ -1,3 +1,6 @@
+import flatpickr from 'flatpickr';
+import 'flatpickr/dist/flatpickr.min.css';
+
 startBtnRef = document.querySelector('[data-start]');
 inputDateRef = document.querySelector('#datetime-picker');
 daysRef = document.querySelector('[data-days]');
@@ -5,69 +8,74 @@ hoursRef = document.querySelector('[data-hours]');
 minsRef = document.querySelector('[data-minutes]');
 secsRef = document.querySelector('[data-seconds]');
 
-inputDateRef.addEventListener('change', onDateInput);
 startBtnRef.addEventListener('click', onStartClick);
 startBtnRef.setAttribute('disabled', '');
 
+const options = {
+  enableTime: true,
+  time_24hr: true,
+  defaultDate: new Date(),
+  minuteIncrement: 1,
+  onClose(selectedDates) {
+    if (Date.parse(selectedDates[0]) <= Date.now()) {
+      window.alert('Please choose a date in the future!');
+      return;
+    }
+    startBtnRef.removeAttribute('disabled', '');
+  },
+};
+
+flatpickr('#datetime-picker', options);
+
 let isActive = false;
 let intervalID = null;
-
-function onDateInput() {
-  const today = new Date();
-  const goalDate = new Date(inputDateRef.value);
-  if (goalDate <= today) {
-    // Swal.fire({
-    //   title: 'Error!',
-    //   text: 'Please choose a date in the future!',
-    //   icon: 'error',
-    //   confirmButtonText: 'Cool',
-    // });
-    alert('Please choose a date in the future!');
-    return;
-  }
-  startBtnRef.removeAttribute('disabled', '');
-  m;
-}
 
 function onStartClick() {
   clearInterval(intervalID);
   const goalDate = new Date(inputDateRef.value);
   intervalID = setInterval(() => {
-    const { diffInDays, diffInHours, diffInMin, diffInSec } =
-      getTimeDifference(goalDate);
-    clockUpdate(diffInDays, diffInHours, diffInMin, diffInSec);
+    const diffInTime = goalDate - Date.now();
+    console.log('diffInTime', diffInTime);
+    if (diffInTime <= 0) {
+      clearInterval(intervalID);
+      console.log('stop');
+      return;
+    }
+    const { days, hours, minutes, seconds } = convertMs(diffInTime);
+    console.log(days, hours, minutes, seconds);
+    clockUpdate(days, hours, minutes, seconds);
   }, 1000);
 }
 
 function clockUpdate(days, hours, mins, secs) {
-  daysRef.textContent = pad(days);
-  hoursRef.textContent = pad(hours);
-  minsRef.textContent = pad(mins);
-  secsRef.textContent = pad(secs);
-  // console.log(days, hours, mins, secs);
+  if (days > 99) {
+    daysRef.textContent = days;
+  } else {
+    daysRef.textContent = pad(days, 2);
+  }
+  hoursRef.textContent = pad(hours, 2);
+  minsRef.textContent = pad(mins, 2);
+  secsRef.textContent = pad(secs, 2);
 }
 
-function getTimeDifference(end) {
-  const start = new Date();
-  const oneDay = 1000 * 60 * 60 * 24;
-  const oneHour = 1000 * 60 * 60;
-  const oneMin = 1000 * 60;
-  const diffInTime = end - start;
-  const diffInDays = Math.floor(diffInTime / oneDay);
-  const diffInHours = Math.floor((diffInTime - diffInDays * oneDay) / oneHour);
-  const diffInMin = Math.floor(
-    (diffInTime - diffInDays * oneDay - diffInHours * oneHour) / oneMin
-  );
-  const diffInSec = Math.floor(
-    (diffInTime -
-      diffInDays * oneDay -
-      diffInHours * oneHour -
-      diffInMin * oneMin) /
-      1000
-  );
-  return { diffInDays, diffInHours, diffInMin, diffInSec };
+function pad(value, numOfDigits) {
+  return String(value).padStart(numOfDigits, '0');
 }
 
-function pad(value) {
-  return String(value).padStart(2, '0');
+function convertMs(ms) {
+  // Number of milliseconds per unit of time
+  const second = 1000;
+  const minute = second * 60;
+  const hour = minute * 60;
+  const day = hour * 24;
+
+  // Remaining days
+  const days = Math.floor(ms / day);
+  // Remaining hours
+  const hours = Math.floor((ms % day) / hour);
+  // Remaining minutes
+  const minutes = Math.floor(((ms % day) % hour) / minute);
+  // Remaining seconds
+  const seconds = Math.floor((((ms % day) % hour) % minute) / second);
+  return { days, hours, minutes, seconds };
 }
