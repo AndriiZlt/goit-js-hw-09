@@ -1,5 +1,6 @@
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
+// import Notiflix from 'notiflix';
 
 startBtnRef = document.querySelector('[data-start]');
 inputDateRef = document.querySelector('#datetime-picker');
@@ -17,8 +18,7 @@ const options = {
   defaultDate: new Date(),
   minuteIncrement: 1,
   onClose(selectedDates) {
-    if (Date.parse(selectedDates[0]) <= Date.now()) {
-      window.alert('Please choose a date in the future!');
+    if (!isFutureDate(selectedDates[0])) {
       return;
     }
     startBtnRef.removeAttribute('disabled', '');
@@ -33,6 +33,9 @@ let intervalID = null;
 function onStartClick() {
   clearInterval(intervalID);
   const goalDate = new Date(inputDateRef.value);
+  if (!isFutureDate(goalDate)) {
+    return;
+  }
   intervalID = setInterval(() => {
     const diffInTime = goalDate - Date.now();
     console.log('diffInTime', diffInTime);
@@ -78,4 +81,12 @@ function convertMs(ms) {
   // Remaining seconds
   const seconds = Math.floor((((ms % day) % hour) % minute) / second);
   return { days, hours, minutes, seconds };
+}
+
+function isFutureDate(value) {
+  if (value <= Date.now()) {
+    Notiflix.Notify.failure('Please choose a date in the future!');
+    return false;
+  }
+  return true;
 }
