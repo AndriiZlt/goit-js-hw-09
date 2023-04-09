@@ -1,12 +1,12 @@
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 
-startBtnRef = document.querySelector('[data-start]');
-inputDateRef = document.querySelector('#datetime-picker');
-daysRef = document.querySelector('[data-days]');
-hoursRef = document.querySelector('[data-hours]');
-minsRef = document.querySelector('[data-minutes]');
-secsRef = document.querySelector('[data-seconds]');
+const startBtnRef = document.querySelector('[data-start]');
+const inputDateRef = document.querySelector('#datetime-picker');
+const daysRef = document.querySelector('[data-days]');
+const hoursRef = document.querySelector('[data-hours]');
+const minsRef = document.querySelector('[data-minutes]');
+const secsRef = document.querySelector('[data-seconds]');
 
 startBtnRef.addEventListener('click', onStartClick);
 startBtnRef.setAttribute('disabled', '');
